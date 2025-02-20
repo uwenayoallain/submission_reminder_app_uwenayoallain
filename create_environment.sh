@@ -89,7 +89,49 @@ echo "--------------------------------------------"
 check_submissions $submissions_file
 EOFREM
     
-    echo "Created all required application files."
+    # Create startup.sh file in the base directory
+    cat > "$base_dir/startup.sh" << 'EOFSTART'
+#!/bin/bash
+
+# Startup script for submission reminder application
+echo "Starting Submission Reminder Application..."
+echo "===========================================" 
+
+# Verify all components exist
+if [ ! -f "./app/reminder.sh" ]; then
+    echo "Error: reminder.sh not found in app directory!"
+    exit 1
+fi
+
+if [ ! -d "./config" ] || [ ! -f "./config/config.env" ]; then
+    echo "Error: configuration files not found!"
+    exit 1
+fi
+
+if [ ! -d "./modules" ] || [ ! -f "./modules/functions.sh" ]; then
+    echo "Error: module files not found!"
+    exit 1
+fi
+
+if [ ! -d "./assets" ] || [ ! -f "./assets/submissions.txt" ]; then
+    echo "Error: assets files not found!"
+    exit 1
+fi
+
+# Make scripts executable if they're not already
+chmod +x ./app/reminder.sh
+chmod +x ./modules/functions.sh
+
+# Change to app directory and execute the reminder script
+cd app
+./reminder.sh
+cd ..
+
+echo "===========================================" 
+echo "Application execution complete."
+EOFSTART
+    
+    echo "Created all application files including startup.sh."
 }
 
 echo "=== Submission Reminder App Environment Setup ==="
@@ -127,4 +169,4 @@ create_directories "$base_directory"
 create_files "$base_directory"
 
 echo
-echo "=== Application Files Setup Complete ==="
+echo "=== Application Setup Complete ==="
