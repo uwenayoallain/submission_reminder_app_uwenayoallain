@@ -36,7 +36,16 @@ David, Shell Basics, submitted
 Olivia, Git, not submitted
 EOFTXT
     
-    echo "Created submissions.txt file with additional students."
+    # Create config.env file
+    cat > "$base_dir/config/config.env" << 'EOFENV'
+#!/bin/bash
+
+# Environment variables for the reminder application
+ASSIGNMENT="Shell Navigation"
+DAYS_REMAINING=3
+EOFENV
+    
+    echo "Created submissions.txt and config.env files."
 }
 
 echo "=== Submission Reminder App Environment Setup ==="
@@ -74,4 +83,4 @@ create_directories "$base_directory"
 create_files "$base_directory"
 
 echo
-echo "=== Initial Setup Complete ==="
+echo "=== Configuration Setup Complete ==="
