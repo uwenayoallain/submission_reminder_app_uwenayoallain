@@ -2,6 +2,19 @@
 
 # Script to set up the submission reminder application environment
 
+# Function to create directories
+create_directories() {
+    local base_dir=$1
+    
+    echo "Creating directory structure..."
+    # Create main directories
+    mkdir -p "$base_dir/assets"
+    mkdir -p "$base_dir/config"
+    mkdir -p "$base_dir/modules"
+    
+    echo "Directory structure created successfully!"
+}
+
 echo "=== Submission Reminder App Environment Setup ==="
 echo
 
@@ -30,4 +43,8 @@ else
     mkdir -p "$base_directory"
 fi
 
-echo "Base directory created successfully!"
+# Create the directory structure
+create_directories "$base_directory"
+
+echo
+echo "=== Directory Setup Complete ==="
