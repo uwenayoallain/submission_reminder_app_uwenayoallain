@@ -11,6 +11,7 @@ create_directories() {
     mkdir -p "$base_dir/assets"
     mkdir -p "$base_dir/config"
     mkdir -p "$base_dir/modules"
+    mkdir -p "$base_dir/app"
     
     echo "Directory structure created successfully!"
 }
@@ -69,7 +70,26 @@ function check_submissions {
 }
 EOFFUNC
     
-    echo "Created submissions.txt, config.env, and functions.sh files."
+    # Create reminder.sh file in the app directory
+    cat > "$base_dir/app/reminder.sh" << 'EOFREM'
+#!/bin/bash
+
+# Source environment variables and helper functions
+source ../config/config.env
+source ../modules/functions.sh
+
+# Path to the submissions file
+submissions_file="../assets/submissions.txt"
+
+# Print remaining time and run the reminder function
+echo "Assignment: $ASSIGNMENT"
+echo "Days remaining to submit: $DAYS_REMAINING days"
+echo "--------------------------------------------"
+
+check_submissions $submissions_file
+EOFREM
+    
+    echo "Created all required application files."
 }
 
 echo "=== Submission Reminder App Environment Setup ==="
@@ -107,4 +127,4 @@ create_directories "$base_directory"
 create_files "$base_directory"
 
 echo
-echo "=== Functions Setup Complete ==="
+echo "=== Application Files Setup Complete ==="
