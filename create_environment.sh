@@ -15,22 +15,28 @@ create_directories() {
     echo "Directory structure created successfully!"
 }
 
-# Start implementing file creation function
+# Implement file creation function
 create_files() {
     local base_dir=$1
     
     echo "Creating and populating files..."
     
-    # Create submissions.txt with header and existing entries
+    # Create submissions.txt with header and existing entries plus 5 more students
     cat > "$base_dir/assets/submissions.txt" << 'EOFTXT'
 student, assignment, submission status
 Chinemerem, Shell Navigation, not submitted
 Chiagoziem, Git, submitted
 Divine, Shell Navigation, not submitted
 Anissa, Shell Basics, submitted
+John, Shell Navigation, not submitted
+Sarah, Git Basics, submitted
+Michael, Shell Scripting, not submitted
+Emma, Shell Navigation, not submitted
+David, Shell Basics, submitted
+Olivia, Git, not submitted
 EOFTXT
     
-    echo "Created submissions.txt file."
+    echo "Created submissions.txt file with additional students."
 }
 
 echo "=== Submission Reminder App Environment Setup ==="
@@ -64,7 +70,7 @@ fi
 # Create the directory structure
 create_directories "$base_directory"
 
-# Start creating files
+# Create files
 create_files "$base_directory"
 
 echo
