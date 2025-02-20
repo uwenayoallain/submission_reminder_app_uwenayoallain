@@ -131,7 +131,13 @@ echo "==========================================="
 echo "Application execution complete."
 EOFSTART
     
-    echo "Created all application files including startup.sh."
+    # Make scripts executable
+    chmod +x "$base_dir/startup.sh"
+    chmod +x "$base_dir/app/reminder.sh"
+    chmod +x "$base_dir/modules/functions.sh"
+    chmod +x "$base_dir/config/config.env"
+    
+    echo "Created all application files and set appropriate permissions."
 }
 
 echo "=== Submission Reminder App Environment Setup ==="
@@ -169,4 +175,7 @@ create_directories "$base_directory"
 create_files "$base_directory"
 
 echo
-echo "=== Application Setup Complete ==="
+echo "=== Setup Complete ==="
+echo "You can now run the application with:"
+echo "  cd $base_directory"
+echo "  ./startup.sh"
