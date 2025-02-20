@@ -1,28 +1,22 @@
-#!/bin/bash
+#!/bin/env bash
+# Submission Reminder App Environment Setup Script
 
-# Script to set up the submission reminder application environment
-
-# Function to create directories
+# Function to create the required directory structure
 create_directories() {
-    local base_dir=$1
-    
-    echo "Creating directory structure..."
-    # Create main directories
-    mkdir -p "$base_dir/assets"
-    mkdir -p "$base_dir/config"
-    mkdir -p "$base_dir/modules"
-    mkdir -p "$base_dir/app"
-    
+    local base_dir="$1"
+    echo "Creating directory structure in '$base_dir'..."
+    for dir in assets config modules app; do
+        mkdir -p "$base_dir/$dir"
+    done
     echo "Directory structure created successfully!"
 }
 
-# Implement file creation function
+# Function to create and populate application files
 create_files() {
-    local base_dir=$1
-    
-    echo "Creating and populating files..."
-    
-    # Create submissions.txt with header and existing entries plus 5 more students
+    local base_dir="$1"
+    echo "Creating and populating application files..."
+
+    # Create submissions.txt with header and student entries
     cat > "$base_dir/assets/submissions.txt" << 'EOFTXT'
 student, assignment, submission status
 Chinemerem, Shell Navigation, not submitted
@@ -36,8 +30,8 @@ Emma, Shell Navigation, not submitted
 David, Shell Basics, submitted
 Olivia, Git, not submitted
 EOFTXT
-    
-    # Create config.env file
+
+    # Create config.env with environment variables
     cat > "$base_dir/config/config.env" << 'EOFENV'
 #!/bin/bash
 
@@ -45,8 +39,8 @@ EOFTXT
 ASSIGNMENT="Shell Navigation"
 DAYS_REMAINING=3
 EOFENV
-    
-    # Create functions.sh file
+
+    # Create modules/functions.sh (unchanged from original)
     cat > "$base_dir/modules/functions.sh" << 'EOFFUNC'
 #!/bin/bash
 
@@ -69,8 +63,8 @@ function check_submissions {
     done < <(tail -n +2 "$submissions_file") # Skip the header
 }
 EOFFUNC
-    
-    # Create reminder.sh file in the app directory
+
+    # Create reminder.sh which displays assignment info and calls check_submissions
     cat > "$base_dir/app/reminder.sh" << 'EOFREM'
 #!/bin/bash
 
@@ -88,8 +82,8 @@ echo "--------------------------------------------"
 
 check_submissions $submissions_file
 EOFREM
-    
-    # Create startup.sh file in the base directory
+
+    # Create startup.sh as the entry point for the application
     cat > "$base_dir/startup.sh" << 'EOFSTART'
 #!/bin/bash
 
@@ -130,34 +124,27 @@ cd ..
 echo "===========================================" 
 echo "Application execution complete."
 EOFSTART
-    
-    # Make scripts executable
-    chmod +x "$base_dir/startup.sh"
-    chmod +x "$base_dir/app/reminder.sh"
-    chmod +x "$base_dir/modules/functions.sh"
-    chmod +x "$base_dir/config/config.env"
-    
+
+    # Set executable permissions on key scripts
+    chmod +x "$base_dir/startup.sh" "$base_dir/app/reminder.sh" "$base_dir/modules/functions.sh" "$base_dir/config/config.env"
     echo "Created all application files and set appropriate permissions."
 }
 
 echo "=== Submission Reminder App Environment Setup ==="
 echo
 
-# Ask for name
-read -p "Please enter your name: " user_name
-
-# Remove spaces and special characters from name
+# Prompt for user's name and sanitize it (removing spaces and special characters)
+read -rp "Please enter your name: " user_name
 clean_name=$(echo "$user_name" | tr -cd '[:alnum:]_-')
 
-# Create the main directory
+# Define the base directory name
 base_directory="submission_reminder_${clean_name}"
+echo "Setting up environment in: '$base_directory'"
 
-echo "Setting up environment in: $base_directory"
-
-# Create the directory if it doesn't exist
+# Create or overwrite the directory based on user confirmation
 if [ -d "$base_directory" ]; then
-    read -p "Directory already exists. Do you want to overwrite it? (y/n): " overwrite
-    if [ "$overwrite" = "y" ] || [ "$overwrite" = "Y" ]; then
+    read -rp "Directory already exists. Do you want to overwrite it? (y/n): " overwrite
+    if [[ "$overwrite" =~ ^[Yy]$ ]]; then
         rm -rf "$base_directory"
         mkdir -p "$base_directory"
     else
@@ -168,10 +155,8 @@ else
     mkdir -p "$base_directory"
 fi
 
-# Create the directory structure
+# Run setup functions
 create_directories "$base_directory"
-
-# Create files
 create_files "$base_directory"
 
 echo
